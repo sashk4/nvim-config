@@ -1,12 +1,12 @@
 vim.g.zig_fmt_autosave = 1
 
 vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'cpp', 'asm', 'go', 'java' },
+  pattern = { 'cs', 'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'cpp', 'asm', 'go', 'java' },
   callback = function()
     vim.bo.expandtab = false -- Use tabs instead of spaces
-    vim.bo.tabstop = 2 -- Tabs are 2 spaces wide
-    vim.bo.shiftwidth = 2 -- Indent by 2 spaces
-    vim.bo.softtabstop = 2 -- Use 2 spaces when hitting <Tab>
+    vim.bo.tabstop = 4 -- Tabs are 2 spaces wide
+    vim.bo.shiftwidth = 4 -- Indent by 2 spaces
+    vim.bo.softtabstop = 4 -- Use 2 spaces when hitting <Tab>
     vim.opt.list = false -- Disable showing '>>' or other listchars
   end,
 })
@@ -31,6 +31,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 -- Define the color palette
 local palette = {
+  -- Base colors
   amber_shadow = '#0d1117',
   midnight_black = '#010409',
   dark_steel = '#161b22',
@@ -104,6 +105,19 @@ local highlights = {
   ['@diff'] = { fg = palette.white },
   ['@diff.minus'] = { fg = palette.red },
   ['@diff.delta'] = { fg = palette.brown },
+  -- UI highlights
+  StatusLine = { fg = palette.misty_white, bg = palette.midnight_black },
+  StatusLineNC = { fg = palette.ethereal_gray, bg = palette.midnight_black },
+  TabLine = { fg = palette.misty_white, bg = palette.midnight_black },
+  TabLineSel = { fg = palette.misty_white, bg = palette.leafy_green },
+  TabLineFill = { fg = palette.ethereal_gray, bg = palette.midnight_black },
+  Normal = { fg = palette.white, bg = 'NONE' },
+  NormalFloat = { fg = palette.white, bg = palette.dark_steel },
+  Pmenu = { fg = palette.white, bg = palette.dark_steel },
+  PmenuSel = { fg = palette.midnight_black, bg = palette.leafy_green },
+  LineNr = { fg = palette.slate_gray },
+  CursorLine = { bg = palette.dark_steel },
+  CursorLineNr = { fg = palette.blaze_orange, bold = true },
 }
 
 local function setup_custom_highlights()
@@ -117,21 +131,6 @@ local function setup_custom_highlights()
   for group, colors in pairs(highlights) do
     vim.api.nvim_set_hl(0, group, colors)
   end
-
-  -- Set some basic colors
-  vim.api.nvim_set_hl(0, 'StatusLine', { fg = '#e1e0e0', bg = '#010101' })
-  vim.api.nvim_set_hl(0, 'StatusLineNC', { fg = '#9d9c9c', bg = '#010101' })
-  vim.api.nvim_set_hl(0, 'TabLine', { fg = '#e1e0e0', bg = '#010101' })
-  vim.api.nvim_set_hl(0, 'TabLineSel', { fg = '#e1e0e0', bg = '#D42B29' })
-  vim.api.nvim_set_hl(0, 'TabLineFill', { fg = '#9d9c9c', bg = '#010101' })
-  vim.api.nvim_set_hl(0, 'Normal', { fg = palette.white, bg = 'NONE' })
-  vim.api.nvim_set_hl(0, 'NormalFloat', { fg = palette.white, bg = palette.dark_steel })
-  vim.api.nvim_set_hl(0, 'Pmenu', { fg = palette.white, bg = palette.dark_steel })
-  vim.api.nvim_set_hl(0, 'PmenuSel', { fg = palette.white, bg = palette.twilight_slate })
-  vim.api.nvim_set_hl(0, 'LineNr', { fg = palette.slate_gray })
-  vim.api.nvim_set_hl(0, 'CursorLine', { bg = palette.dark_steel })
-  vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = palette.blaze_orange, bold = true })
-  vim.api.nvim_set_hl(0, 'PmenuSel', { fg = '#010101', bg = '#D42B29' })
 end
 
 setup_custom_highlights()
@@ -236,14 +235,14 @@ require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'elkowar/yuck.vim',
   'github/copilot.vim',
-  {
-    --
-    -- Plugin for top tier code completion in Rust
-    --
-    'mrcjkb/rustaceanvim',
-    version = '^5',
-    lazy = false,
-  },
+  -- {
+  --   --
+  --   -- Plugin for top tier code completion in Rust
+  --   --
+  --   'mrcjkb/rustaceanvim',
+  --   version = '^5',
+  --   lazy = false,
+  -- },
   {
     --
     -- Plugin for Cursor like IDE experience in Nvim
@@ -304,24 +303,24 @@ require('lazy').setup({
       },
     },
   },
-  {
-    --
-    -- Plugin for visualizing lifetimes in rust
-    --
-    'cordx56/rustowl',
-    version = '*', -- Latest stable version
-    build = 'cargo install --path . --locked',
-    lazy = false, -- This plugin is already lazy
-    opts = {
-      client = {
-        on_attach = function(_, buffer)
-          vim.keymap.set('n', '<leader>o', function()
-            require('rustowl').toggle(buffer)
-          end, { buffer = buffer, desc = 'Toggle RustOwl' })
-        end,
-      },
-    },
-  },
+  -- {
+  --   --
+  --   -- Plugin for visualizing lifetimes in rust
+  --   --
+  --   'cordx56/rustowl',
+  --   version = '*', -- Latest stable version
+  --   build = 'cargo install --path . --locked',
+  --   lazy = false, -- This plugin is already lazy
+  --   opts = {
+  --     client = {
+  --       on_attach = function(_, buffer)
+  --         vim.keymap.set('n', '<leader>o', function()
+  --           require('rustowl').toggle(buffer)
+  --         end, { buffer = buffer, desc = 'Toggle RustOwl' })
+  --       end,
+  --     },
+  --   },
+  -- },
   {
     'nvim-java/nvim-java',
     'MeanderingProgrammer/render-markdown.nvim',
